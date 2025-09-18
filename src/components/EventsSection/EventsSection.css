@@ -1,0 +1,19 @@
+.events-section {
+  padding: 60px 20px;
+  background-color: #f0f2f5;
+  text-align: center;
+}
+
+.btn-see-more:hover {
+    background-color: #497aa6; 
+    color: #fff;
+    border-color: #497aa6; 
+}
+
+.events-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 30px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
