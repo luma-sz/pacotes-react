@@ -4,10 +4,20 @@
   text-align: center;
 }
 
-.btn-see-more:hover {
-    background-color: #497aa6; 
-    color: #fff;
-    border-color: #497aa6; 
+.section-title {
+  font-size: 2.4rem;
+  color: #333;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  /* Remove a margem superior padrão do título para eliminar a faixa branca */
+  margin-top: 0; 
+}
+
+.section-subtitle {
+  font-size: 1.1rem;
+  color: #555;
+  max-width: 700px;
+  margin: 0 auto 2.5rem auto;
 }
 
 .events-grid {

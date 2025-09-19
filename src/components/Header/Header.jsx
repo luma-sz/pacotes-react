@@ -1,6 +1,6 @@
 import React from 'react';
 import Navbar from '../Navbar/Navbar.jsx';
-// Removemos a importação do BookingWidget
+// Linha removida: import BookingWidget from '../BookingWidget/BookingWidget.jsx';
 import './Header.css';
 
 const Header = () => {
@@ -12,7 +12,13 @@ const Header = () => {
     <header className="hero-section" style={headerStyle}>
       <div className="hero-overlay"></div>
       <Navbar />
-      {/* O BookingWidget foi removido daqui */}
+
+      <div className="hero-content">
+        <h1>Encontre a sua próxima experiência!</h1>
+        <p>Em nossa rede, sua estadia perfeita está a um clique de distância</p>
+      </div>
+      
+      {/* A linha <BookingWidget /> foi removida daqui */}
     </header>
   );
 };

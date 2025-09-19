@@ -26,15 +26,19 @@ const EventCard = ({ event }) => {
           <ul className="event-details-pills">
               {details.pills.map((pill, index) => (
                   <li key={index}>
-                      <i className={pill.icon}></i> {pill.text}
+                      {/* Ícones removidos daqui */}
+                      <a href={details.bookingLink} target="_blank" rel="noopener noreferrer">
+                        {pill.text}
+                      </a>
                   </li>
               ))}
           </ul>
-          {/* LINK DO WHATSAPP */}
+          
+          {/* ÍCONE DO WHATSAPP ADICIONADO AQUI */}
           <a href={details.whatsappLink} className="whatsapp-link" target="_blank" rel="noopener noreferrer">
               <i className="fab fa-whatsapp"></i> {details.whatsappText}
           </a>
-          {/* BOTÃO DO MOTOR DE RESERVAS */}
+          
           <a href={details.bookingLink} className="btn-see-more" target="_blank" rel="noopener noreferrer">
             {details.buttonText}
           </a>

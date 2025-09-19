@@ -7,16 +7,8 @@ import 'flatpickr/dist/flatpickr.min.css';
 import '../../flatpickr-theme.css';
 import './BookingWidget.css';
 
-const hotelMapping = {
-    'Viale Tower': '3398',
-    'Viale Cataratas': '2510',
-    'Viale Iguassu': '13102'
-};
-const hotelNameMapping = {
-    '3398': 'Viale Tower',
-    '2510': 'Viale Cataratas',
-    '13102': 'Viale Iguassu'
-};
+const hotelMapping = { 'Viale Tower': '3398', 'Viale Cataratas': '2510', 'Viale Iguassu': '13102' };
+const hotelNameMapping = { '3398': 'Viale Tower', '2510': 'Viale Cataratas', '13102': 'Viale Iguassu' };
 
 const BookingWidget = () => {
     const [destination, setDestination] = useState('');
@@ -33,17 +25,12 @@ const BookingWidget = () => {
 
     const [isGuestPopupOpen, setGuestPopupOpen] = useState(false);
     const [isHotelDropdownOpen, setHotelDropdownOpen] = useState(false);
-    const [openAgeDropdown, setOpenAgeDropdown] = useState(null); 
     
-    const popupContainerRef = useRef(null);
+    const widgetRef = useRef(null);
 
     const handlePopupToggle = (popupName) => {
-        // Converte o index da idade para o formato de string usado no state
-        const agePopupId = typeof popupName === 'number' ? `age-${popupName}` : popupName;
-    
-        setHotelDropdownOpen(agePopupId === 'hotel' ? !isHotelDropdownOpen : false);
-        setGuestPopupOpen(agePopupId === 'guests' ? !isGuestPopupOpen : false);
-        setOpenAgeDropdown(agePopupId.startsWith('age-') ? (openAgeDropdown === agePopupId ? null : agePopupId) : null);
+        setHotelDropdownOpen(popupName === 'hotel' ? !isHotelDropdownOpen : false);
+        setGuestPopupOpen(popupName === 'guests' ? !isGuestPopupOpen : false);
     };
 
     const handleCheckinChange = (selectedDates) => {
@@ -62,19 +49,15 @@ const BookingWidget = () => {
         setChildren(newCount);
         setChildrenAges(Array.from({ length: newCount }, (_, i) => childrenAges[i] || ""));
     };
-
-    const handleAgeChange = (index, value) => {
+    const handleAgeChange = (index, event) => {
         const newAges = [...childrenAges];
-        newAges[index] = value;
+        newAges[index] = event.target.value;
         setChildrenAges(newAges);
-        setOpenAgeDropdown(null);
     };
-    
     const handleHotelSelect = (hotelId) => {
         setDestination(hotelId);
         setHotelDropdownOpen(false);
     };
-
     const handleFormSubmit = (e) => {
         e.preventDefault();
         if (!destination) {
@@ -106,10 +89,9 @@ const BookingWidget = () => {
     
     useEffect(() => {
         const handleClickOutside = (event) => {
-            if (popupContainerRef.current && !popupContainerRef.current.contains(event.target)) {
+            if (widgetRef.current && !widgetRef.current.contains(event.target)) {
                 setGuestPopupOpen(false);
                 setHotelDropdownOpen(false);
-                setOpenAgeDropdown(null);
             }
         };
         document.addEventListener("mousedown", handleClickOutside);
@@ -122,8 +104,8 @@ const BookingWidget = () => {
     const selectedHotelName = destination ? hotelNameMapping[destination] : 'SELECIONE O HOTEL';
 
     return (
-        <form className="booking-widget" ref={popupContainerRef}>
-            <div className={`form-field ${isHotelDropdownOpen ? 'field-active' : ''}`}>
+        <form className="booking-widget" ref={widgetRef} onSubmit={handleFormSubmit}>
+            <div className="form-field">
                 <label>Destino ou Hotel</label>
                 <div className="custom-dropdown-trigger" onClick={() => handlePopupToggle('hotel')}>
                     <span>{selectedHotelName}</span>
@@ -157,7 +139,7 @@ const BookingWidget = () => {
                 />
             </div>
 
-            <div className={`form-field guest-field ${isGuestPopupOpen ? 'field-active' : ''}`}>
+            <div className="form-field guest-field">
                 <label>Hóspedes</label>
                 <div className="custom-dropdown-trigger" onClick={() => handlePopupToggle('guests')}>
                     <span>{guestDisplayText}</span>
@@ -185,19 +167,21 @@ const BookingWidget = () => {
                                 {childrenAges.map((age, index) => (
                                     <div key={index} className="child-age-selector">
                                         <label>Criança {index + 1}</label>
-                                        <div className="custom-dropdown-trigger age-trigger" onClick={() => handlePopupToggle(index)}>
-                                            <span>{age !== "" ? `${age} Anos` : 'Idade'}</span>
-                                            <FontAwesomeIcon icon={faChevronDown} className="select-arrow" />
-                                        </div>
-                                        {openAgeDropdown === `age-${index}` && (
-                                            <ul className="custom-dropdown-menu age-menu">
+                                        <div className="select-age-wrapper">
+                                            <select 
+                                                value={age}
+                                                onChange={(e) => handleAgeChange(index, e)}
+                                                className="age-select"
+                                            >
+                                                <option value="" disabled>Idade</option>
                                                 {Array.from({ length: 18 }, (_, i) => i).map(ageOption => (
-                                                    <li key={ageOption} onClick={() => handleAgeChange(index, ageOption)}>
-                                                        {ageOption} Anos
-                                                    </li>
+                                                    <option key={ageOption} value={ageOption}>
+                                                        {ageOption} {ageOption === 1 ? 'Ano' : 'Anos'}
+                                                    </option>
                                                 ))}
-                                            </ul>
-                                        )}
+                                            </select>
+                                            <FontAwesomeIcon icon={faChevronDown} className="select-arrow-age" />
+                                        </div>
                                     </div>
                                 ))}
                             </div>
