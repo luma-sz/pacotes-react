@@ -10,7 +10,7 @@ function App() {
   return (
     <div className="App">
       <Header />
-      <BookingWidget /> {/* POSICIONADO AQUI, FORA DO HEADER */}
+      <BookingWidget /> 
       <main>
         <EventsSection />
         <Newsletter />
